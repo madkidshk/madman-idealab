@@ -527,7 +527,7 @@ footer { text-align: center; color: var(--sub); font-size: 12px; padding: 18px 0
 <body>
 <header class="site-header">
   <span class="site-title">廣告狂人 · 內容策展</span>
-  <span class="site-meta">2026-06-05 · 2026-06-05 16:20</span>
+  <span class="site-meta">2026-06-05 · 2026-06-05 16:21</span>
 </header>
 <nav class="quick-nav">
   
@@ -2116,8 +2116,8 @@ function loadSources(slug) {
           var checked = s.title.includes('[ARCHIVE]') || s.title.includes('[AD-RESEARCH]') || s.title.includes('[BRAND]') ? 'checked' : 'checked';
           return '<label class="src-item"><input type="checkbox" ' + checked +
             ' data-sid="' + s.id + '" data-slug="' + slug + '">' +
-            '<span class="src-type">' + (s.title.match(/\[(\w[^\]]*)\]/) || ['','?'])[1] + '</span>' +
-            '<span>' + s.title.replace(/^\[[^\]]+\]\s*/,'').substring(0,80) + '</span></label>';
+            '<span class="src-type">' + (s.stype||'?') + '</span>' +
+            '<span>' + (s.clean||s.title||'').substring(0,80) + '</span></label>';
         }).join('');
     })
     .catch(e => { el.textContent = 'Listener 未開: ' + e.message; });
