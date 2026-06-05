@@ -430,6 +430,42 @@ a { text-decoration: none; }
 }
 .empty-state code { background: var(--bg); border-radius: 4px; padding: 1px 5px; font-size: 12px; }
 
+/* NBLM 底稿 card */
+.nblm-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid #7C3AED;
+  border-radius: var(--r);
+  padding: 18px 18px 14px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.nblm-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.nblm-badge {
+  background: #7C3AED; color: #fff;
+  font-size: 11px; font-weight: 800;
+  border-radius: 20px; padding: 2px 9px;
+}
+.nblm-slug { font-size: 11px; color: var(--sub); font-family: monospace; }
+.nblm-title { font-size: 17px; font-weight: 800; line-height: 1.4; margin-bottom: 12px; }
+.nblm-body {
+  font-size: 14px; line-height: 1.8; color: #39414e;
+  white-space: pre-wrap;
+  max-height: 420px; overflow-y: auto;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 12px 14px; background: #FAFAFA;
+  margin-bottom: 12px;
+}
+.nblm-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.multi-done { font-size: 13px; color: var(--green); font-weight: 600; }
+.btn-dark {
+  background: var(--ink); color: #fff;
+}
+.btn-dark:hover { background: #333; }
+.btn-dark:disabled { background: #999; cursor: default; }
+
 /* 出呢篇按鈕 */
 .write-btn {
   display: block;
@@ -483,10 +519,11 @@ footer { text-align: center; color: var(--sub); font-size: 12px; padding: 18px 0
 <body>
 <header class="site-header">
   <span class="site-title">廣告狂人 · 內容策展</span>
-  <span class="site-meta">2026-06-05 · 2026-06-05 16:02</span>
+  <span class="site-meta">2026-06-05 · 2026-06-05 16:11</span>
 </header>
 <nav class="quick-nav">
-  <a href="#pub">🚀 待出街</a>
+  
+  <a href="#pub">📝 WP 草稿</a>
   <a href="#arena">🏆 AI 擂台</a>
   <a href="#cand">📰 今日新料</a>
   <a href="#ref">📅 日曆</a>
@@ -495,6 +532,7 @@ footer { text-align: center; color: var(--sub); font-size: 12px; padding: 18px 0
   <a class="intake-btn" href="https://docs.google.com/spreadsheets/d/1vb0gORcmFyg6VGZiVo4o-fy5ps7iK_Y9BXmDGMuMs3k/edit#gid=0" target="_blank" rel="noopener">
     ➕ 入料口 — YT link / Drive 文件 / 純題材 → 每 5 分鐘自動入 pipeline
   </a>
+  
   <section class="sec-block" id="pub"><div class="sec-head">📝 WP 草稿 — 等你編輯 <span class="sec-badge">3</span></div>
 <div class="pub-card">
   <div class="pub-top">
@@ -542,7 +580,7 @@ docomo「かわ…</p>
     <a class="btn btn-ghost" href="https://madman-magazine.com/?p=5926" target="_blank" rel="noopener">👁 預覽</a>
   </div>
 </div></section>
-  <section class="sec-block" id="arena"><div class="sec-head">🏆 AI 擂台 <span class="sec-badge">5</span></div>
+  <section class="sec-block" id="arena"><div class="sec-head">🏆 AI 擂台 — 其他 model <span class="sec-badge">5</span></div>
 <div class="arena-block">
   <div class="arena-topic">Sapporo Yebisu「満たされる時間/山田さん」篇（日本啤酒品牌最新 15 秒 KV）</div>
   
@@ -2056,6 +2094,28 @@ CalorieMate 成功將品牌由一個「補充能量」嘅功能性產品，升�
 <button class="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <footer>廣告狂人內容策展系統 v2</footer>
 <script>
+function saveWP(slug, btn) {
+  btn.disabled = true; btn.textContent = '⏳ 入 WP…';
+  fetch('http://127.0.0.1:8898/save_wp?slug=' + encodeURIComponent(slug))
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) { btn.textContent = '✅ 入咗 WP 草稿'; }
+      else { btn.disabled=false; btn.textContent='💾 存入 WP 草稿'; alert(d.error||JSON.stringify(d)); }
+    })
+    .catch(e => { btn.disabled=false; btn.textContent='💾 存入 WP 草稿'; alert('Listener 未開: '+e.message); });
+}
+
+function runMulti(slug, btn) {
+  btn.disabled = true; btn.textContent = '⏳ 跑緊… 等 WhatsApp 通知';
+  fetch('http://127.0.0.1:8898/write_multi?slug=' + encodeURIComponent(slug))
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) { btn.textContent = '✅ 已觸發 — 完成後 reload 睇 AI 擂台'; }
+      else { btn.disabled=false; btn.textContent='🔁 試其他 model 寫同一素材'; alert(d.error||JSON.stringify(d)); }
+    })
+    .catch(e => { btn.disabled=false; btn.textContent='🔁 試其他 model 寫同一素材'; alert('Listener 未開: '+e.message); });
+}
+
 function triggerWrite(slug, btn) {
   if (!slug) return;
   btn.disabled = true;
