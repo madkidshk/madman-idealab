@@ -458,7 +458,15 @@ a { text-decoration: none; }
   padding: 12px 14px; background: #FAFAFA;
   margin-bottom: 12px;
 }
-.nblm-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.nblm-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+.src-panel { margin: 10px 0; border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 12px; }
+.src-panel > summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--blue); list-style: none; }
+.src-panel > summary::-webkit-details-marker { display: none; }
+.src-list { margin: 8px 0; }
+.src-item { display: flex; align-items: flex-start; gap: 7px; padding: 4px 0; font-size: 12.5px; border-bottom: 1px solid var(--line); }
+.src-item:last-child { border-bottom: none; }
+.src-item input { margin-top: 2px; flex-shrink: 0; }
+.src-type { font-size: 10px; font-weight: 700; border-radius: 4px; padding: 1px 5px; background: var(--bg); color: var(--sub); white-space: nowrap; }
 .multi-done { font-size: 13px; color: var(--green); font-weight: 600; }
 .btn-dark {
   background: var(--ink); color: #fff;
@@ -519,7 +527,7 @@ footer { text-align: center; color: var(--sub); font-size: 12px; padding: 18px 0
 <body>
 <header class="site-header">
   <span class="site-title">廣告狂人 · 內容策展</span>
-  <span class="site-meta">2026-06-05 · 2026-06-05 16:11</span>
+  <span class="site-meta">2026-06-05 · 2026-06-05 16:20</span>
 </header>
 <nav class="quick-nav">
   
@@ -2094,6 +2102,41 @@ CalorieMate 成功將品牌由一個「補充能量」嘅功能性產品，升�
 <button class="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <footer>廣告狂人內容策展系統 v2</footer>
 <script>
+function loadSources(slug) {
+  var el = document.getElementById('src-' + slug);
+  if (el && el.dataset.loaded) return;
+  fetch('http://127.0.0.1:8898/nb_sources?slug=' + encodeURIComponent(slug))
+    .then(r => r.json())
+    .then(d => {
+      if (!d.ok) { el.textContent = '錯誤: ' + (d.error||''); return; }
+      el.dataset.loaded = '1';
+      el.innerHTML = '<div style="font-size:11px;color:var(--sub);margin-bottom:6px">' +
+        'Brand NB: ' + d.brand + ' · ' + d.sources.length + ' 個 source</div>' +
+        d.sources.map(function(s) {
+          var checked = s.title.includes('[ARCHIVE]') || s.title.includes('[AD-RESEARCH]') || s.title.includes('[BRAND]') ? 'checked' : 'checked';
+          return '<label class="src-item"><input type="checkbox" ' + checked +
+            ' data-sid="' + s.id + '" data-slug="' + slug + '">' +
+            '<span class="src-type">' + (s.title.match(/\[(\w[^\]]*)\]/) || ['','?'])[1] + '</span>' +
+            '<span>' + s.title.replace(/^\[[^\]]+\]\s*/,'').substring(0,80) + '</span></label>';
+        }).join('');
+    })
+    .catch(e => { el.textContent = 'Listener 未開: ' + e.message; });
+}
+
+function rewriteWithSources(slug, btn) {
+  var checked = document.querySelectorAll('[data-slug="' + slug + '"]:checked');
+  var ids = Array.from(checked).map(function(cb) { return cb.dataset.sid; });
+  if (ids.length === 0) { alert('要至少揀一個 source'); return; }
+  btn.disabled = true; btn.textContent = '⏳ 生文中…';
+  fetch('http://127.0.0.1:8898/write_nblm?slug=' + encodeURIComponent(slug) + '&src=' + ids.join(','))
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) { btn.textContent = '✅ 生文緊 — 等 dashboard 更新'; }
+      else { btn.disabled=false; btn.textContent='✍️ 用揀咗嘅 source 重新生文'; alert(d.error||JSON.stringify(d)); }
+    })
+    .catch(e => { btn.disabled=false; btn.textContent='✍️ 用揀咗嘅 source 重新生文'; alert(e.message); });
+}
+
 function saveWP(slug, btn) {
   btn.disabled = true; btn.textContent = '⏳ 入 WP…';
   fetch('http://127.0.0.1:8898/save_wp?slug=' + encodeURIComponent(slug))
