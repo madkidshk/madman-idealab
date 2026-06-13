@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-HK"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>廣告狂人 · 訪問轉錄 + 分聲</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#1c1c1e;--sub:#6b7280;--line:#e7e9ee;
+--accent:#4f46e5;--green:#0A7D3F;--a:#4f46e5;--b:#0A7D3F;--c:#d97706;--d:#be185d;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang HK","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15px;padding:14px;max-width:920px;margin:0 auto}
+a{color:var(--accent);text-decoration:none}
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:nowrap;margin-bottom:12px}
+.titlerow h1{font-size:19px;font-weight:800}
+.hdrbtns{flex:none;display:flex;gap:7px;align-items:center}
+.homebtn,.refbtn,.helpopen{flex:none;white-space:nowrap;font-size:16px;line-height:1;background:#eef0fe;border:1px solid #dcdffb;border-radius:8px;padding:5px 9px;cursor:pointer;color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;margin-bottom:13px}
+.intake{border:1.5px solid #c7cbf5;background:#fbfbff}
+.intake h2{font-size:15px;margin-bottom:9px}
+textarea.lk{width:100%;min-height:46px;border:1px solid var(--line);border-radius:9px;padding:9px;font:inherit;resize:vertical}
+.attrow1{display:flex;gap:8px;margin-top:8px}
+.attrow1 .send{flex:0 0 auto;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+.attbtns2{display:flex;gap:8px;margin-top:8px}
+.attbtns2 .pick{flex:1;background:#eef0fe;border:1px solid #dcdffb;border-radius:9px;padding:9px;cursor:pointer;font:inherit;color:var(--ink)}
+.hint{color:var(--sub);font-size:12.5px;margin-top:7px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:#eef2ff;border:1px solid #dde3ff;border-radius:20px;padding:3px 10px;font-size:12.5px;display:flex;align-items:center;gap:6px}
+.chip b{cursor:pointer;color:#b00}
+.status{margin-top:9px}
+.status:not(:empty){background:#fff8e1;border:1px solid #fde68a;border-radius:9px;padding:9px;font-size:13px}
+.ivhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ivtitle{font-weight:800;font-size:16px}
+.edit{cursor:pointer;color:var(--sub);font-size:13px}
+.badge{font-size:12px;border-radius:20px;padding:2px 9px;font-weight:700}
+.b-done{background:#e7f5ec;color:var(--green)}
+.b-tr{background:#fff4e0;color:#b45309}
+.b-new{background:#eef0fe;color:var(--accent)}
+.b-err{background:#fdecec;color:#c0392b}
+.meta{color:var(--sub);font-size:12.5px;margin:5px 0 2px}
+.spkbar{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
+.spkedit{display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:8px;padding:3px 7px;font-size:13px}
+.spkedit .dot{width:10px;height:10px;border-radius:50%}
+.spkedit input{border:none;border-bottom:1px dashed #c7cbf5;font:inherit;width:78px;background:transparent;color:var(--ink)}
+.conv{margin-top:6px}
+.seg{display:flex;gap:9px;padding:6px 0;border-top:1px solid #f1f2f5;align-items:flex-start}
+.seg .who{flex:0 0 auto;min-width:74px;font-weight:700;font-size:13px}
+.seg .tc{flex:0 0 auto;color:var(--sub);font-size:12px;font-variant-numeric:tabular-nums;padding-top:1px}
+.seg .tx{flex:1;font-size:14.5px;white-space:pre-wrap;word-break:break-word}
+.sa{color:var(--a)} .sb{color:var(--b)} .sc{color:var(--c)} .sd{color:var(--d)}
+.acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.acts button{background:#f3f4f6;border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;font:inherit;font-size:13px;color:var(--ink)}
+.acts .danger{color:#b00}
+.empty{color:var(--sub);text-align:center;padding:30px 10px}
+/* overlay */
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:50;padding:18px;overflow:auto}
+#ov.on{display:block}
+#ovbox{background:#fff;max-width:560px;margin:24px auto;border-radius:16px;padding:20px}
+#ovbox h3{margin-bottom:9px}
+#ovbox section{margin:11px 0;font-size:14px}
+#ovbox b{color:var(--accent)}
+.ovclose{float:right;cursor:pointer;font-size:20px;color:var(--sub)}
+@media(max-width:560px){.seg .who{min-width:60px}.titlerow h1{font-size:17px}}
+</style></head>
+<body>
+<div class="titlerow"><h1>🎙️ 訪問轉錄 + 分聲</h1>
+<span class="hdrbtns">
+<button class="helpopen" onclick="ovShow()" title="點用">❓</button>
+<a class="homebtn" href="index.html" title="總目錄">🏠</a>
+<button class="refbtn" onclick="location.href=location.pathname+'?t='+Date.now()" title="重新載入">🔄</button>
+</span></div>
+
+<div class="card intake">
+<h2>➕ 新訪問</h2>
+<textarea class="lk" id="lk" placeholder="貼錄音/片嘅 Google Drive link（按送出）"></textarea>
+<div class="attrow1"><button class="send" id="send" onclick="submitIntake()">送出 ⏎</button></div>
+<div class="attbtns2"><button class="pick" onclick="document.getElementById('fp').click()">📎 由電腦揀錄音/片檔</button></div>
+<input type="file" id="fp" accept="audio/*,video/*" style="display:none" onchange="onPick(this)">
+<div class="chips" id="chips"></div>
+<div class="status" id="ist"></div>
+<div class="hint">送出後 AI 自動分聲轉錄（廣東話）。揀檔即自動上載＋處理；貼 link 要㩒送出。</div>
+</div>
+
+<div id="list"></div>
+
+<div id="ov"><div id="ovbox">
+<span class="ovclose" onclick="ovHide()">✕</span>
+<h3>❓ 點用</h3>
+<section><b>收訪問</b>：貼 Drive link 㩒送出，或撳「由電腦揀檔」揀錄音/片。亦可掉檔入 mm Drive intake folder，或用 iPhone「訪問錄音」捷徑分享錄音 → 自動入嚟。</section>
+<section><b>分聲</b>：AI 自動分開唔同人講嘅嘢，標 Speaker A／B…＋時間碼。每段一個人，唔會撈埋。</section>
+<section><b>改名</b>：撳 speaker 個名改做真名（主持／嘉賓陳生），會套晒落成篇＋匯出。</section>
+<section><b>出稿</b>：📋 Copy 全稿入剪貼簿；⬇ 匯出 .txt 或 .srt 字幕。✏️ 改標題。🔁 重新轉錄。🗑 刪。</section>
+<section style="color:var(--sub)">分聲準唔準靠錄音清晰度；嘈雜/多人搶咪嗰陣覆核返。</section>
+<label style="font-size:13px"><input type="checkbox" id="nohelp"> 以後唔好自動彈</label>
+</div></div>
+
+<script>
+var IV = {"gas": "https://script.google.com/macros/s/AKfycbxxT7UBQhSSQ5YOdsns4RBUk8rk4KwyRSU6OHtnFplbw9dXf5XlvZb-KPw_9va0tZcoQQ/exec", "token": "mmiv7q3z2voice", "intakeFolder": "1661ck6YlZU9DEQU2ZZtJIBhBvsBbppdD", "items": [{"id": "IV26061301", "title": "ZZTEST 合成訪問", "status": "done", "speakers": "2", "lang": "混", "dur": "41", "recv": "2026-06-13 20:19", "fid": "1JpeqG196KR0UGXyZI_wgH7fz-fkPfEfQ", "note": "6 段", "names": {}, "segments": [{"t": "0:00", "speaker": "Speaker A", "text": "今日好高興請到你嚟我哋廣告狂人嘅訪問，可唔可以同大家講下你入行嘅經過？"}, {"t": "0:07", "speaker": "Speaker B", "text": "多谢邀请。我做了创意总监差不多15年，最初由文案做起，慢慢先转去审大稿同带团队。"}, {"t": "0:17", "speaker": "Speaker A", "text": "你覺得而家做廣告同十年前最大嘅分別係咩？"}, {"t": "0:21", "speaker": "Speaker B", "text": "最大分别系速度同平台。以前一个campaign审成个月，而家可能三日就要出街。"}, {"t": "0:28", "speaker": "Speaker A", "text": "咁你會點樣同AI共存？會唔會驚AI搶你份工？"}, {"t": "0:33", "speaker": "Speaker B", "text": "我反而觉得AI是帮手，它可以做到格式执行同草稿，但真正打动人的情感始终要靠人。"}]}]};
+var COLORS = ["sa","sb","sc","sd"];
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function jsonp(params){return new Promise(function(res,rej){
+  var cb="cb"+Math.floor(performance.now()*1000)%1e9;
+  window[cb]=function(d){res(d);delete window[cb];s.remove();};
+  var qs=Object.keys(params).map(function(k){return k+"="+encodeURIComponent(params[k])}).join("&");
+  var s=document.createElement("script");
+  s.src=IV.gas+"?"+qs+"&token="+IV.token+"&callback="+cb;
+  s.onerror=function(){rej(new Error("network"));delete window[cb];s.remove();};
+  document.body.appendChild(s);
+  setTimeout(function(){if(window[cb]){rej(new Error("timeout"));delete window[cb];}},25000);
+});}
+// speaker label → display name
+function nm(it,sp){return (it.names&&it.names[sp])||sp;}
+function spkIndex(sp){var m=/Speaker\s*([A-Za-z])/.exec(sp);return m?m[1].toUpperCase().charCodeAt(0)-65:0;}
+function fmtDur(s){s=parseInt(s||0);if(!s)return"";var m=Math.floor(s/60),x=s%60;return m+":"+(x<10?"0":"")+x;}
+
+function transcriptText(it){
+  return it.segments.map(function(g){
+    return nm(it,g.speaker)+"  ["+g.t+"]\n"+g.text;
+  }).join("\n\n");
+}
+function srtTime(t){ // "M:SS"/"H:MM:SS" → "HH:MM:SS,000"
+  var p=String(t).split(":").map(Number);var s=0;
+  if(p.length==3)s=p[0]*3600+p[1]*60+p[2];else if(p.length==2)s=p[0]*60+p[1];else s=p[0]||0;
+  var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=Math.floor(s%60);
+  function z(n,w){n=""+n;while(n.length<(w||2))n="0"+n;return n;}
+  return z(h)+":"+z(m)+":"+z(x)+",000";
+}
+function srtText(it){
+  var seg=it.segments;var out=[];
+  for(var i=0;i<seg.length;i++){
+    var end=i+1<seg.length?seg[i+1].t:null;
+    var endStr=end?srtTime(end):srtTime(seg[i].t).replace(/,000$/,",000"); // last: +0 (best effort)
+    out.push((i+1)+"\n"+srtTime(seg[i].t)+" --> "+endStr+"\n"+nm(it,seg[i].speaker)+"："+seg[i].text+"\n");
+  }
+  return out.join("\n");
+}
+function dl(name,text){
+  var b=new Blob([text],{type:"text/plain;charset=utf-8"});var a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+}
+function copyText(t,btn){
+  function ok(){if(btn){var o=btn.textContent;btn.textContent="✓ 已 Copy";setTimeout(function(){btn.textContent=o},1400);}}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){fb()})}else fb();
+  function fb(){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok()}catch(e){}ta.remove();}
+}
+
+function badge(st){
+  var m={done:["b-done","✅ 完成"],transcribing:["b-tr","⏳ 轉錄中"],new:["b-new","🆕 待轉錄"],error:["b-err","⚠️ 出錯"]};
+  var x=m[st]||m["new"];return '<span class="badge '+x[0]+'">'+x[1]+'</span>';
+}
+
+function renderItem(it){
+  var spks={};it.segments.forEach(function(g){spks[g.speaker]=1;});
+  var spkList=Object.keys(spks).sort();
+  var bar=spkList.map(function(sp){
+    var ci=COLORS[spkIndex(sp)%4];
+    return '<span class="spkedit"><span class="dot" style="background:var(--'+["a","b","c","d"][spkIndex(sp)%4]+')"></span>'+
+      '<input data-iv="'+it.id+'" data-sp="'+esc(sp)+'" value="'+esc(nm(it,sp))+'" '+
+      'onchange="renameSpk(this)" title="'+esc(sp)+'"></span>';
+  }).join("");
+  var conv=it.segments.map(function(g){
+    var ci=COLORS[spkIndex(g.speaker)%4];
+    return '<div class="seg"><span class="who '+ci+'" data-sp="'+esc(g.speaker)+'">'+esc(nm(it,g.speaker))+
+      '</span><span class="tc">'+esc(g.t)+'</span><span class="tx">'+esc(g.text)+'</span></div>';
+  }).join("");
+  var meta='<div class="meta">'+(it.speakers?it.speakers+' 位講者 · ':'')+
+    (it.lang?it.lang+' · ':'')+(it.dur?fmtDur(it.dur)+' · ':'')+esc(it.recv)+'</div>';
+  var body="";
+  if(it.status==="done"&&it.segments.length){
+    body=meta+'<div class="spkbar">'+bar+'</div><div class="conv">'+conv+'</div>'+
+      '<div class="acts">'+
+      '<button onclick="copyText(transcriptByIv(\''+it.id+'\'),this)">📋 Copy 全稿</button>'+
+      '<button onclick="dl(\''+it.id+'.txt\',transcriptByIv(\''+it.id+'\'))">⬇ .txt</button>'+
+      '<button onclick="dl(\''+it.id+'.srt\',srtByIv(\''+it.id+'\'))">⬇ .srt 字幕</button>'+
+      '<button onclick="redo(\''+it.id+'\')">🔁 重新轉錄</button>'+
+      '<button class="danger" onclick="del(\''+it.id+'\')">🗑 刪</button></div>';
+  }else if(it.status==="error"){
+    body=meta+'<div class="hint">⚠️ '+esc(it.note)+'</div><div class="acts">'+
+      '<button onclick="redo(\''+it.id+'\')">🔁 再試</button>'+
+      '<button class="danger" onclick="del(\''+it.id+'\')">🗑 刪</button></div>';
+  }else{
+    body=meta+'<div class="hint" id="prog-'+it.id+'">'+
+      (it.status==="transcribing"?"⏳ AI 分聲轉錄中…":"🆕 排緊隊，下個 cycle 自動轉錄")+'</div>';
+  }
+  return '<div class="card" id="card-'+it.id+'"><div class="ivhead">'+
+    '<span class="ivtitle" id="t-'+it.id+'">'+esc(it.title)+'</span>'+
+    '<span class="edit" onclick="ren(\''+it.id+'\')">✏️</span>'+badge(it.status)+'</div>'+body+'</div>';
+}
+function transcriptByIv(id){var it=IV.items.find(function(x){return x.id===id});return transcriptText(it);}
+function srtByIv(id){var it=IV.items.find(function(x){return x.id===id});return srtText(it);}
+
+function render(){
+  var L=document.getElementById("list");
+  if(!IV.items.length){L.innerHTML='<div class="card empty">仲未有訪問。貼條 Drive link 或揀個錄音檔開始。</div>';return;}
+  L.innerHTML=IV.items.map(renderItem).join("");
+  // poll any in-progress
+  IV.items.forEach(function(it){if(it.status==="new"||it.status==="transcribing")watch(it.id);});
+}
+
+// ---- speaker rename ----
+function renameSpk(inp){
+  var id=inp.getAttribute("data-iv"),sp=inp.getAttribute("data-sp"),v=inp.value.trim();
+  var it=IV.items.find(function(x){return x.id===id});if(!it)return;
+  it.names=it.names||{};it.names[sp]=v;
+  // live apply
+  document.querySelectorAll('#card-'+id+' .who[data-sp="'+sp.replace(/"/g,'')+'"]').forEach(function(e){e.textContent=v||sp;});
+  jsonp({action:"setspeakers",iv:id,names:JSON.stringify(it.names)}).catch(function(){});
+}
+function ren(id){
+  var it=IV.items.find(function(x){return x.id===id});var v=prompt("改標題：",it.title);
+  if(v===null)return;it.title=v.trim()||it.title;document.getElementById("t-"+id).textContent=it.title;
+  jsonp({action:"settitle",iv:id,title:it.title}).catch(function(){});
+}
+function redo(id){if(!confirm("重新轉錄呢段訪問？"))return;
+  jsonp({action:"redo",iv:id}).then(function(){alert("已排隊，下個 cycle 重新轉錄。");watch(id);});}
+function del(id){if(!confirm("刪除呢段訪問（可還原）？"))return;
+  jsonp({action:"deljob",iv:id}).then(function(){var c=document.getElementById("card-"+id);if(c)c.remove();});}
+
+// ---- intake ----
+var staged=null;
+function onPick(inp){if(inp.files&&inp.files[0]){staged=inp.files[0];doUpload();}}
+function submitIntake(){
+  var v=document.getElementById("lk").value.trim();
+  if(!v){if(staged)doUpload();return;}
+  if(!/drive\.google\.com|^[A-Za-z0-9_-]{20,}$/.test(v)){st("⚠️ 淨係收 Google Drive link");return;}
+  var b=document.getElementById("send");b.disabled=true;st("⏳ 收緊 link…");
+  jsonp({action:"link",link:v}).then(function(d){
+    b.disabled=false;document.getElementById("lk").value="";
+    if(d&&d.ok){st("✅ 已收，下個 cycle 自動轉錄。");}else st("⚠️ "+((d&&d.err)||"失敗"));
+  }).catch(function(){b.disabled=false;st("⚠️ 網絡問題");});
+}
+function st(m){document.getElementById("ist").innerHTML=m;}
+function doUpload(){
+  if(!staged)return;var f=staged;
+  document.getElementById("chips").innerHTML='<span class="chip">📎 '+esc(f.name)+'</span>';
+  st("⏳ 上載中 0%…");
+  jsonp({action:"initupload",name:f.name,mime:f.type||"application/octet-stream",size:f.size,origin:location.origin}).then(function(d){
+    if(!d||!d.ok||!d.uri){st("⚠️ 開上載失敗："+((d&&d.err)||""));return;}
+    var xhr=new XMLHttpRequest();xhr.open("PUT",d.uri,true);
+    xhr.setRequestHeader("Content-Type",f.type||"application/octet-stream");
+    xhr.upload.onprogress=function(e){if(e.lengthComputable)st("⏳ 上載中 "+Math.round(e.loaded/e.total*100)+"%…");};
+    xhr.onload=function(){
+      var fid="";try{fid=JSON.parse(xhr.responseText).id;}catch(e){}
+      jsonp({action:"uploaded",fileid:fid,name:f.name}).then(function(r){
+        staged=null;document.getElementById("chips").innerHTML="";
+        if(r&&r.ok){st("✅ 已上載，下個 cycle 自動轉錄。");if(r.iv)watch(r.iv);}else st("✅ 已上載");
+      });
+    };
+    xhr.onerror=function(){st("⚠️ 上載失敗（network）");};
+    xhr.send(f);
+  }).catch(function(){st("⚠️ 網絡問題");});
+}
+
+// ---- progress poll ----
+function watch(iv){
+  var n=0;var t=setInterval(function(){
+    n++;jsonp({action:"status",iv:iv}).then(function(d){
+      if(!d||!d.ok)return;
+      if(d.status==="done"){clearInterval(t);location.href=location.pathname+"?t="+Date.now();}
+      else{var e=document.getElementById("prog-"+iv);if(e)e.textContent=d.status==="transcribing"?"⏳ AI 分聲轉錄中…":"🆕 排緊隊…";}
+      if(n>40)clearInterval(t);
+    }).catch(function(){});
+  },20000);
+}
+
+// ---- help overlay ----
+function ovShow(){document.getElementById("ov").classList.add("on");}
+function ovHide(){var c=document.getElementById("nohelp");if(c&&c.checked)localStorage.setItem("ivhelpseen","1");document.getElementById("ov").classList.remove("on");}
+document.getElementById("ov").addEventListener("click",function(e){if(e.target.id==="ov")ovHide();});
+if(!localStorage.getItem("ivhelpseen"))ovShow();
+
+// ---- safe auto-refresh (4 min) ----
+setInterval(function(){
+  // 加密頁：冇 staticrypt remember-me 唔好 reload（否則彈密碼）。preview（plaintext）冇呢 key → 唔自動 reload，正常。
+  if(!localStorage.getItem("staticrypt_passphrase"))return;
+  var a=document.activeElement;
+  if(a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA"))return;
+  if(staged)return;if(document.getElementById("ov").classList.contains("on"))return;
+  location.href=location.pathname+"?t="+Date.now();
+},240000);
+
+// Enter on link textarea
+document.getElementById("lk").addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();submitIntake();}});
+
+render();
+</script>
+</body></html>
